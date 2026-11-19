@@ -1,11 +1,18 @@
 name: validate
 
+# Day-to-day work goes to `develop` and runs no CI. CI runs once on the release PR
+# into `main` and once on the version tag; docs and benchmark-only changes skip it.
 on:
-  push:
-    branches: [main]
-    tags: ["v*"]
   pull_request:
+    branches: [main]
+    paths-ignore: ["**.md", "bench/**", "LICENSE"]
+  push:
+    tags: ["v*"]
   workflow_dispatch:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:

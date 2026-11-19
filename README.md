@@ -161,3 +161,9 @@ uv run python scripts/mcp_smoke.py    # end-to-end qua MCP stdio (cần model)
 ARCHI_TTS_HOME=~/.archi-tts/home uv run python scripts/control_check.py   # các script đo cần giọng clone
 ARCHI_TTS_SMOKE_CMD=bin/archi-tts-mcp uv run python scripts/mcp_smoke.py   # qua launcher của plugin
 ```
+
+### Nhánh và phát hành
+
+- `main`: chỉ chứa bản đã phát hành, là thứ người cài plugin nhận được. Không commit thẳng.
+- `develop`: làm việc hằng ngày ở đây. Push lên `develop` không chạy CI.
+- Phát hành: tăng `version` trong `.claude-plugin/plugin.json` (chỗ duy nhất chứa version) và cập nhật `CHANGELOG.md` trên `develop`, mở PR `develop → main` (CI chạy một lần), merge khi xanh, rồi gắn tag `vX.Y.Z` trên `main` (CI kiểm tra tag khớp version).
