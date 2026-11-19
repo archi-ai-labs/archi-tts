@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang=vi><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>So sánh TTS tiếng Việt</title>
+<style>
+:root{--bg:#fafaf8;--fg:#1c1c1a;--muted:#6b6b66;--line:#e2e1dc;--card:#fff;--accent:#2f5bd3;--accent-fg:#fff;--warn:#b3261e}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161615;--fg:#ecebe6;--muted:#9c9b95;--line:#2e2d2a;--card:#1f1f1d;--accent:#7a9bff;--accent-fg:#111;--warn:#ff8a80}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 16px 80px}h1{font-size:24px;margin:0 0 4px}h2{font-size:18px;margin:40px 0 8px}
+.lead,.small{color:var(--muted)}.small{font-size:13px;margin:6px 0 0}
+.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;margin-top:12px;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;white-space:nowrap}thead th{color:var(--muted);font-weight:500;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.card-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}.dur{color:var(--muted);font-size:13px}
+audio{width:100%;height:36px}.score{display:flex;gap:6px;margin-top:8px}
+.score button{flex:1;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:6px;padding:4px 0;cursor:pointer;font:inherit}
+.score button.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.note{width:100%;margin-top:8px;border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:6px;padding:6px 8px;font:inherit;font-size:13px}
+.segs{padding-left:18px}.tag{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-right:4px}
+details{margin:4px 0 12px}summary{cursor:pointer;color:var(--muted)}
+.bar{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 16px;display:flex;gap:12px;align-items:center;justify-content:center}
+.bar button{border:0;background:var(--accent);color:var(--accent-fg);border-radius:8px;padding:8px 16px;font:inherit;cursor:pointer}
+.warn{color:var(--warn)}ul.notes{color:var(--muted);font-size:14px;padding-left:18px}
+</style></head><body><main>
+<h1>So sánh TTS tiếng Việt chạy local</h1>
+<p class=lead>Cùng văn bản, cùng bộ chuẩn hóa (soe-vinorm + từ điển phát âm), cùng clip tham chiếu. Máy: MacBook M1 Pro 16GB. Nghe theo từng bài, chấm 1–5, rồi bấm "Copy điểm" và dán lại cho Claude.</p>
+
+<div class=tablewrap><table><thead><tr><th>Engine</th><th>Model</th><th>RAM đỉnh</th><th>Chạy trên</th><th>RTF</th><th>Ước tính video 15 phút</th><th>Thời gian load</th><th>Chất lượng file</th><th>Lỗi đọc (WER)</th></tr></thead>
+<tbody><tr><th scope=row>VieNeu v3 Turbo · giọng có sẵn</th><td>0.61 GB</td><td>2.88 GB</td><td>CPU</td><td>0.269</td><td>4.0 phút</td><td>6.4 s</td><td>48 kHz</td><td>3.3%</td></tr><tr><th scope=row>VieNeu v3 Turbo · clone</th><td>0.64 GB</td><td>3.89 GB</td><td>CPU</td><td>0.635</td><td>9.5 phút</td><td>5.7 s</td><td>48 kHz</td><td>3.3%</td></tr><tr><th scope=row>OmniVoice VN (g-omnivoice)</th><td>3.27 GB</td><td>6.28 GB</td><td>MPS</td><td>2.124</td><td>31.9 phút</td><td>8.7 s</td><td>24 kHz</td><td>2.5%</td></tr><tr><th scope=row>F5-TTS ViVoice</th><td>5.45 GB</td><td>8.51 GB</td><td>MPS</td><td>3.385</td><td>50.8 phút</td><td>19.8 s</td><td>24 kHz</td><td>1.9%</td></tr></tbody></table></div>
+<p class=small>RAM đỉnh = peak memory footprint (tính cả bộ nhớ GPU/MPS). RTF = thời gian sinh / độ dài audio; nhỏ hơn 1 là nhanh hơn thời gian thực. Lỗi đọc = tỉ lệ âm tiết Whisper large-v3-turbo nghe sai/thiếu/thừa, đã bỏ bài số/viết tắt (Whisper ghi số dạng ký hiệu) và gộp tr/ch, r/d/gi, s/x (Whisper viết sai chính tả giọng Bắc). Chỉ để so sánh tương đối.</p>
+<ul class=notes><li><b>VieNeu v3 Turbo · giọng có sẵn</b>: Ngọc Huyền (nữ) / Phạm Tuyên (nam). Không clone, không đổi cảm xúc.</li><li><b>VieNeu v3 Turbo · clone</b>: Clone từ clip tham chiếu bên dưới.</li><li><b>OmniVoice VN (g-omnivoice)</b>: Clone từ clip tham chiếu. MPS, 32 bước.</li><li><b>F5-TTS ViVoice</b>: Clone từ clip tham chiếu. MPS, 32 bước. License phi thương mại.</li></ul>
+<h2>Nhận xét từ số đo (chưa thay được tai nghe)</h2>
+<ul class=notes>
+<li><b>Tốc độ:</b> VieNeu nhanh hơn hẳn: giọng có sẵn ~4 phút, clone ~10 phút cho video 15 phút. OmniVoice ~32 phút, F5 ~51 phút.</li>
+<li><b>Lỗi thanh điệu</b> (Whisper nghe ra): VieNeu giọng có sẵn sai nhiều nhất, ví dụ "dã quỳ→giã quỷ", "kè→kẻ", "nàn→nản", "ồn ào→ổn ảo", "phường→phương". VieNeu clone và F5 cũng có "dã quỳ→giã quỷ". OmniVoice không có lỗi thanh điệu nào ở các bài này.</li>
+<li><b>F5</b> bỏ mất chữ "chiếc" trong bài thuyết minh.</li>
+<li><b>Hội thoại</b> câu "Đi Ba Vì đi em" bị Whisper nghe dính chữ ở cả VieNeu clone và OmniVoice. Cần nghe kỹ xem engine đọc quá nhanh hay do Whisper.</li>
+<li><b>"Pro"</b> đọc "pờ rô" bị nghe thành "Peugeot" ở 3/4 engine, nên đổi từ điển thành "prô".</li>
+<li><b>Dung lượng F5</b> 5.45 GB vì file gốc chứa cả trạng thái huấn luyện; trọng số thật khoảng 1.3 GB nếu tách ra.</li>
+<li><b>Cảm xúc:</b> chỉ VieNeu giọng có sẵn không đổi được cảm xúc (luôn đọc theo phong cách của giọng). Mức độ thể hiện cảm xúc của các engine clone cần bạn nghe ở bài "Cảm xúc".</li>
+<li><b>Lưu ý:</b> MCP server dùng bộ chuẩn hóa sea-g2p thay vì soe-vinorm của benchmark này (xung đột thư viện với VieNeu/OmniVoice). Hai bộ cho kết quả tương đương trên các câu thử.</li>
+</ul>
+
+<section id="t1_thuyet_minh"><h2>Thuyết minh video (~40s)</h2>
+<details><summary>Văn bản</summary><ul class=segs><li><span class=tag>nu</span> Chào mừng các bạn quay trở lại với kênh. Trong video hôm nay, chúng ta sẽ cùng nhau tìm hiểu vì sao những chiếc máy tính dùng chip Apple lại tiết kiệm điện đến vậy. Câu trả lời nằm ở cách thiết kế: bộ xử lý, bộ nhớ và nhân đồ họa được đặt chung trên một con chip duy nhất. Nhờ đó, dữ liệu không phải đi một quãng đường dài, máy chạy mát hơn và pin dùng được lâu hơn. Tuy nhiên, thiết kế này cũng có điểm trừ, đó là bạn không thể tự nâng cấp bộ nhớ sau khi mua. Vậy có nên mua hay không? Hãy cùng xem tiếp nhé.</li></ul></details>
+<div class=grid><div class=card data-engine="vieneu_preset" data-test="t1_thuyet_minh">
+  <div class=card-head><b>VieNeu v3 Turbo · giọng có sẵn</b><span class=dur>28.2 s</span></div>
+  <audio controls preload=none src="vieneu_preset/t1_thuyet_minh.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="vieneu_clone" data-test="t1_thuyet_minh">
+  <div class=card-head><b>VieNeu v3 Turbo · clone</b><span class=dur>29.48 s</span></div>
+  <audio controls preload=none src="vieneu_clone/t1_thuyet_minh.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="omnivoice" data-test="t1_thuyet_minh">
+  <div class=card-head><b>OmniVoice VN (g-omnivoice)</b><span class=dur>29.09 s</span></div>
+  <audio controls preload=none src="omnivoice/t1_thuyet_minh.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="f5" data-test="t1_thuyet_minh">
+  <div class=card-head><b>F5-TTS ViVoice</b><span class=dur>27.81 s</span></div>
+  <audio controls preload=none src="f5/t1_thuyet_minh.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div></div></section><section id="t2_hoi_thoai"><h2>Hội thoại nam/nữ</h2>
+<details><summary>Văn bản</summary><ul class=segs><li><span class=tag>nu</span> Anh ơi, cuối tuần này mình đi đâu chơi không?</li><li><span class=tag>nam</span> Đi Ba Vì đi em, nghe nói trên đó đang mùa hoa dã quỳ đẹp lắm.</li><li><span class=tag>nu</span> Thật á? Nhưng mà dự báo thời tiết bảo có mưa đấy.</li><li><span class=tag>nam</span> Thế thì mình mang thêm áo mưa, có sao đâu. Đi sớm về sớm là được.</li></ul></details>
+<div class=grid><div class=card data-engine="vieneu_preset" data-test="t2_hoi_thoai">
+  <div class=card-head><b>VieNeu v3 Turbo · giọng có sẵn</b><span class=dur>15.46 s</span></div>
+  <audio controls preload=none src="vieneu_preset/t2_hoi_thoai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="vieneu_clone" data-test="t2_hoi_thoai">
+  <div class=card-head><b>VieNeu v3 Turbo · clone</b><span class=dur>16.26 s</span></div>
+  <audio controls preload=none src="vieneu_clone/t2_hoi_thoai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="omnivoice" data-test="t2_hoi_thoai">
+  <div class=card-head><b>OmniVoice VN (g-omnivoice)</b><span class=dur>15.43 s</span></div>
+  <audio controls preload=none src="omnivoice/t2_hoi_thoai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="f5" data-test="t2_hoi_thoai">
+  <div class=card-head><b>F5-TTS ViVoice</b><span class=dur>14.75 s</span></div>
+  <audio controls preload=none src="f5/t2_hoi_thoai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div></div></section><section id="t3_so_viet_tat"><h2>Số, ngày, viết tắt, tiếng Anh</h2>
+<details><summary>Văn bản</summary><ul class=segs><li><span class=tag>nu</span> Ngày 15/8/2025, giá vàng tăng 12,5% so với cùng kỳ. Tại TP.HCM, hơn 1.250.000 người đã tiêm vắc xin COVID-19. Chiếc iPhone 16 Pro có giá khoảng 25 triệu đồng, dùng chip mới với GPU mạnh hơn 30%. Buổi họp bắt đầu lúc 14h30, cách trung tâm 3km. Các ứng dụng AI ngày càng phổ biến.</li></ul></details>
+<div class=grid><div class=card data-engine="vieneu_preset" data-test="t3_so_viet_tat">
+  <div class=card-head><b>VieNeu v3 Turbo · giọng có sẵn</b><span class=dur>23.4 s</span></div>
+  <audio controls preload=none src="vieneu_preset/t3_so_viet_tat.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="vieneu_clone" data-test="t3_so_viet_tat">
+  <div class=card-head><b>VieNeu v3 Turbo · clone</b><span class=dur>25.16 s</span></div>
+  <audio controls preload=none src="vieneu_clone/t3_so_viet_tat.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="omnivoice" data-test="t3_so_viet_tat">
+  <div class=card-head><b>OmniVoice VN (g-omnivoice)</b><span class=dur>25.78 s</span></div>
+  <audio controls preload=none src="omnivoice/t3_so_viet_tat.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="f5" data-test="t3_so_viet_tat">
+  <div class=card-head><b>F5-TTS ViVoice</b><span class=dur>24.7 s</span></div>
+  <audio controls preload=none src="f5/t3_so_viet_tat.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div></div></section><section id="t4_doan_dai"><h2>Đoạn dài ~2 phút (kiểm tra ổn định)</h2>
+<details><summary>Văn bản</summary><ul class=segs><li><span class=tag>nam</span> Hà Nội vào thu là lúc thành phố đẹp nhất trong năm. Buổi sáng, sương mỏng phủ trên mặt hồ Gươm, những hàng cây bên đường bắt đầu chuyển sang màu vàng nhạt. Người ta thấy những gánh hàng rong chở đầy hoa cúc họa mi đi qua các con phố cổ, để lại một mùi hương rất nhẹ. Ở góc phố Hàng Bông, ông cụ bán cốm vẫn ngồi đó như mấy chục năm nay, gói từng nắm cốm xanh trong lá sen. Khách quen đi qua, dừng lại hỏi han vài câu, rồi lại vội vã hòa vào dòng người. Buổi trưa, nắng trở nên vàng hơn, trong hơn, không còn gay gắt như những ngày hè. Học sinh tan trường ríu rít trên vỉa hè, tiếng còi xe xen lẫn tiếng rao quen thuộc. Chiều xuống, gió hồ Tây thổi lồng lộng, những đôi bạn trẻ ngồi bên bờ kè ngắm hoàng hôn đỏ rực cuối trời. Khi đèn đường bật sáng, phố phường lại mang một vẻ khác, vừa náo nhiệt vừa trầm mặc. Những quán cà phê nhỏ chật kín người, câu chuyện kéo dài đến tận khuya. Có lẽ vì thế mà dù đi đâu, người Hà Nội vẫn luôn nhớ về mùa thu của mình, nhớ cái se lạnh đầu mùa, nhớ mùi hoa sữa nồng nàn, và nhớ cả những buổi chiều lang thang không có mục đích. Mùa thu Hà Nội không ồn ào, không rực rỡ, nhưng đủ để khiến người ta thương nhớ mãi.</li></ul></details>
+<div class=grid><div class=card data-engine="vieneu_preset" data-test="t4_doan_dai">
+  <div class=card-head><b>VieNeu v3 Turbo · giọng có sẵn</b><span class=dur>64.72 s</span></div>
+  <audio controls preload=none src="vieneu_preset/t4_doan_dai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="vieneu_clone" data-test="t4_doan_dai">
+  <div class=card-head><b>VieNeu v3 Turbo · clone</b><span class=dur>71.52 s</span></div>
+  <audio controls preload=none src="vieneu_clone/t4_doan_dai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="omnivoice" data-test="t4_doan_dai">
+  <div class=card-head><b>OmniVoice VN (g-omnivoice)</b><span class=dur>73.26 s</span></div>
+  <audio controls preload=none src="omnivoice/t4_doan_dai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="f5" data-test="t4_doan_dai">
+  <div class=card-head><b>F5-TTS ViVoice</b><span class=dur>68.91 s</span></div>
+  <audio controls preload=none src="f5/t4_doan_dai.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div></div></section><section id="t5_cam_xuc"><h2>Cảm xúc qua clip tham chiếu</h2>
+<details><summary>Văn bản</summary><ul class=segs><li><span class=tag>nu · vui</span> Trời ơi, cuối cùng thì mình cũng làm được rồi! Vui quá đi mất!</li><li><span class=tag>nu · buồn</span> Từ ngày anh đi, căn nhà này bỗng trở nên trống trải lạ thường.</li><li><span class=tag>nam · tức giận</span> Tôi đã nói bao nhiêu lần rồi, sao anh vẫn không chịu nghe?</li><li><span class=tag>nam · trung tính</span> Theo thông tin từ trung tâm khí tượng, ngày mai Hà Nội có mưa rào và dông.</li></ul></details>
+<div class=grid><div class=card data-engine="vieneu_preset" data-test="t5_cam_xuc">
+  <div class=card-head><b>VieNeu v3 Turbo · giọng có sẵn</b><span class=dur>16.9 s</span></div>
+  <audio controls preload=none src="vieneu_preset/t5_cam_xuc.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="vieneu_clone" data-test="t5_cam_xuc">
+  <div class=card-head><b>VieNeu v3 Turbo · clone</b><span class=dur>18.02 s</span></div>
+  <audio controls preload=none src="vieneu_clone/t5_cam_xuc.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="omnivoice" data-test="t5_cam_xuc">
+  <div class=card-head><b>OmniVoice VN (g-omnivoice)</b><span class=dur>18.34 s</span></div>
+  <audio controls preload=none src="omnivoice/t5_cam_xuc.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="f5" data-test="t5_cam_xuc">
+  <div class=card-head><b>F5-TTS ViVoice</b><span class=dur>16.92 s</span></div>
+  <audio controls preload=none src="f5/t5_cam_xuc.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div></div></section><section id="t6_ngat_nhan"><h2>Ngắt nghỉ &amp; nhấn từ</h2>
+<details><summary>Văn bản</summary><ul class=segs><li><span class=tag>nu</span> Đây là điều quan trọng nhất. [ngắt 1.0s] Bạn *phải* sao lưu dữ liệu trước khi cập nhật. [ngắt 0.6s] Nếu không, *toàn bộ* ảnh và tài liệu có thể bị mất.</li></ul></details>
+<div class=grid><div class=card data-engine="vieneu_preset" data-test="t6_ngat_nhan">
+  <div class=card-head><b>VieNeu v3 Turbo · giọng có sẵn</b><span class=dur>9.39 s</span></div>
+  <audio controls preload=none src="vieneu_preset/t6_ngat_nhan.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="vieneu_clone" data-test="t6_ngat_nhan">
+  <div class=card-head><b>VieNeu v3 Turbo · clone</b><span class=dur>9.55 s</span></div>
+  <audio controls preload=none src="vieneu_clone/t6_ngat_nhan.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="omnivoice" data-test="t6_ngat_nhan">
+  <div class=card-head><b>OmniVoice VN (g-omnivoice)</b><span class=dur>9.08 s</span></div>
+  <audio controls preload=none src="omnivoice/t6_ngat_nhan.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div><div class=card data-engine="f5" data-test="t6_ngat_nhan">
+  <div class=card-head><b>F5-TTS ViVoice</b><span class=dur>8.97 s</span></div>
+  <audio controls preload=none src="f5/t6_ngat_nhan.mp3"></audio>
+  <div class=score role=radiogroup aria-label="Điểm"><button type=button data-v=1>1</button><button type=button data-v=2>2</button><button type=button data-v=3>3</button><button type=button data-v=4>4</button><button type=button data-v=5>5</button></div>
+  <input class=note placeholder="Ghi chú (lỗi thanh điệu, nuốt chữ...)">
+</div></div></section>
+<section><h2>Clip tham chiếu (dùng cho các engine clone)</h2>
+<p class=small>Lấy từ dataset mở slexisvn/emotion-tts-vietnamese-sample; đây là giọng tổng hợp của Gemini TTS, chọn tự động theo nội dung câu. Nếu giọng hay cảm xúc chưa đúng ý, có thể thay clip khác.</p>
+<div class=grid><div class=card><div class=card-head><b>Nữ · trung tính</b><span class=dur>7.1 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Để sử dụng lò vi sóng an toàn, bạn không nên dùng các vật dụng bằng kim loại và cần đặt thức ăn vào hộp chuyên dụng chịu nhiệt.</p></div><div class=card><div class=card-head><b>Nữ · vui</b><span class=dur>10.0 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Trời ơi chị hai sinh em bé rồi, thằng cu trộm vía kháu khỉnh đáng yêu quá chừng, cả nhà mình vỡ òa trong hạnh phúc, tôi chính thức được lên chức dì rồi mọi người ơi!</p></div><div class=card><div class=card-head><b>Nữ · buồn</b><span class=dur>8.7 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Tôi thấy mình già đi nhanh vì lo lắng, vì thất bại, vì gồng gánh, nhưng điều đau nhất là chẳng ai nhận ra tôi đang kiệt quệ.</p></div><div class=card><div class=card-head><b>Nữ · tức giận</b><span class=dur>5.6 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Bà cứ để nước chảy tràn sang nhà tôi, tôi đã nhắc bao nhiêu lần rồi, bà có tai để nghe không vậy?</p></div><div class=card><div class=card-head><b>Nam · trung tính</b><span class=dur>7.1 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Sản phẩm được đóng gói trong hộp giấy các tông tái chế, bên trong có lớp xốp chống sốc để bảo vệ khi vận chuyển.</p></div><div class=card><div class=card-head><b>Nam · vui</b><span class=dur>9.4 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Nhìn con chập chững bước đi những bước đầu tiên mà lòng mẹ trào dâng niềm hạnh phúc khó tả, cảm ơn con đã đến bên mẹ thật khỏe mạnh!</p></div><div class=card><div class=card-head><b>Nam · buồn</b><span class=dur>7.6 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Tôi mất động lực vì làm gì cũng bị chê, bị phủ nhận, và cuối cùng tôi không còn tin vào lựa chọn của chính mình nữa.</p></div><div class=card><div class=card-head><b>Nam · tức giận</b><span class=dur>7.0 s</span></div>
+<p class=small>Clip không kèm trong repo (giọng của bên thứ ba): chạy bench/common/pick_refs.py để tải.</p><p class=small>Tại sao đến giờ này mà hồ sơ vẫn chưa được duyệt, các anh có biết sự chậm trễ này gây thiệt hại bao nhiêu tiền của cho doanh nghiệp chúng tôi không hả?</p></div></div></section>
+</main>
+<div class=bar><span id=count class=small></span><button id=copy type=button>Copy điểm</button></div>
+<script>
+const KEY='archi-tts-bench-v1';let state={};try{state=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){};count()};
+const count=()=>{const n=Object.values(state).filter(v=>v.score).length;document.getElementById('count').textContent=n+' ô đã chấm'};
+document.querySelectorAll('.card[data-engine]').forEach(c=>{const k=c.dataset.engine+'/'+c.dataset.test;const s=state[k]||{};
+ c.querySelectorAll('.score button').forEach(b=>{if(+b.dataset.v===s.score)b.classList.add('on');
+  b.onclick=()=>{c.querySelectorAll('.score button').forEach(x=>x.classList.remove('on'));b.classList.add('on');state[k]={...state[k],score:+b.dataset.v};save()}});
+ const n=c.querySelector('.note');n.value=s.note||'';n.oninput=()=>{state[k]={...state[k],note:n.value};save()}});
+document.querySelectorAll('audio').forEach(a=>a.addEventListener('play',()=>document.querySelectorAll('audio').forEach(o=>{if(o!==a)o.pause()})));
+document.getElementById('copy').onclick=async()=>{const t=JSON.stringify(state,null,1);try{await navigator.clipboard.writeText(t);document.getElementById('copy').textContent='Đã copy'}catch(e){prompt('Copy:',t)}};
+count();
+</script></body></html>

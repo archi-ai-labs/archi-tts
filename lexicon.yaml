@@ -1,0 +1,23 @@
+# Cách đọc từ. Key viết HOA toàn bộ thì khớp đúng hoa-thường, còn lại khớp không phân biệt.
+# Giá trị là chuỗi (mọi engine) hoặc theo engine: {vieneu: ..., omnivoice: ...}.
+# Cách đọc được gửi nguyên văn tới engine, không qua bộ chuẩn hóa.
+# VieNeu học song ngữ nên thường đọc từ tiếng Anh viết nguyên (GPU, Pro) tốt hơn phiên âm;
+# OmniVoice cần phiên âm, gạch nối giúp đọc liền mạch hơn (ây-ai).
+AI: ây-ai
+app: áp
+Apple: áp pồ
+chip: chíp
+COVID: cô vít
+COVID-19: cô vít mười chín
+CPU: {vieneu: CPU, omnivoice: xi-pi-iu}
+email: i meo
+GPU: {vieneu: GPU, omnivoice: gi-pi-iu}
+iPhone: ai phôn
+MacBook: mác búc
+OK: ô kê
+online: on lai
+podcast: pót cát
+Pro: {vieneu: Pro, omnivoice: prô}
+TikTok: tích tốc
+video: vi đê ô
+YouTube: diu túp

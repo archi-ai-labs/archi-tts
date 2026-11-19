@@ -1,0 +1,130 @@
+{
+ "vieneu_preset": {
+  "engine": "vieneu_preset",
+  "device": "cpu",
+  "sample_rate": 48000,
+  "model_gb": 0.61,
+  "peak_ram_gb": 2.94,
+  "load_s": 6.4,
+  "gen_s": 39.5,
+  "audio_s": 146.7,
+  "rtf": 0.269,
+  "est_15min_video_min": 4.0,
+  "wall_s": 46.4,
+  "tests": {
+   "t1_thuyet_minh": 28.2,
+   "t2_hoi_thoai": 15.46,
+   "t3_so_viet_tat": 23.4,
+   "t4_doan_dai": 64.72,
+   "t5_cam_xuc": 16.9,
+   "t6_ngat_nhan": 9.39
+  },
+  "wer": 0.041,
+  "wer_by_test": {
+   "t1_thuyet_minh": 0.0,
+   "t2_hoi_thoai": 0.056,
+   "t3_so_viet_tat": 0.067,
+   "t4_doan_dai": 0.055,
+   "t5_cam_xuc": 0.017,
+   "t6_ngat_nhan": 0.0
+  },
+  "wer_adj": 0.033,
+  "peak_footprint_gb": 2.88
+ },
+ "vieneu_clone": {
+  "engine": "vieneu_clone",
+  "device": "cpu",
+  "sample_rate": 48000,
+  "model_gb": 0.64,
+  "peak_ram_gb": 3.47,
+  "load_s": 5.7,
+  "gen_s": 100.8,
+  "audio_s": 158.6,
+  "rtf": 0.635,
+  "est_15min_video_min": 9.5,
+  "wall_s": 107.5,
+  "tests": {
+   "t1_thuyet_minh": 29.48,
+   "t2_hoi_thoai": 16.26,
+   "t3_so_viet_tat": 25.16,
+   "t4_doan_dai": 71.52,
+   "t5_cam_xuc": 18.02,
+   "t6_ngat_nhan": 9.55
+  },
+  "wer": 0.036,
+  "wer_by_test": {
+   "t1_thuyet_minh": 0.0,
+   "t2_hoi_thoai": 0.111,
+   "t3_so_viet_tat": 0.058,
+   "t4_doan_dai": 0.035,
+   "t5_cam_xuc": 0.017,
+   "t6_ngat_nhan": 0.0
+  },
+  "wer_adj": 0.033,
+  "peak_footprint_gb": 3.89
+ },
+ "omnivoice": {
+  "engine": "omnivoice",
+  "device": "mps",
+  "sample_rate": 24000,
+  "model_gb": 3.27,
+  "peak_ram_gb": 3.02,
+  "load_s": 8.7,
+  "gen_s": 339.0,
+  "audio_s": 159.6,
+  "rtf": 2.124,
+  "est_15min_video_min": 31.9,
+  "wall_s": 351.5,
+  "tests": {
+   "t1_thuyet_minh": 29.09,
+   "t2_hoi_thoai": 15.43,
+   "t3_so_viet_tat": 25.78,
+   "t4_doan_dai": 73.26,
+   "t5_cam_xuc": 18.34,
+   "t6_ngat_nhan": 9.08
+  },
+  "wer": 0.029,
+  "wer_by_test": {
+   "t1_thuyet_minh": 0.0,
+   "t2_hoi_thoai": 0.093,
+   "t3_so_viet_tat": 0.048,
+   "t4_doan_dai": 0.027,
+   "t5_cam_xuc": 0.017,
+   "t6_ngat_nhan": 0.0
+  },
+  "wer_adj": 0.025,
+  "peak_footprint_gb": 6.28
+ },
+ "f5": {
+  "engine": "f5",
+  "device": "mps",
+  "sample_rate": 24000,
+  "model_gb": 5.45,
+  "peak_ram_gb": 1.89,
+  "load_s": 19.8,
+  "gen_s": 510.1,
+  "audio_s": 150.7,
+  "rtf": 3.385,
+  "est_15min_video_min": 50.8,
+  "wall_s": 536.7,
+  "tests": {
+   "t1_thuyet_minh": 27.81,
+   "t2_hoi_thoai": 14.75,
+   "t3_so_viet_tat": 24.7,
+   "t4_doan_dai": 68.91,
+   "t5_cam_xuc": 16.92,
+   "t6_ngat_nhan": 8.97
+  },
+  "wer": 0.029,
+  "wer_by_test": {
+   "t1_thuyet_minh": 0.008,
+   "t2_hoi_thoai": 0.037,
+   "t3_so_viet_tat": 0.048,
+   "t4_doan_dai": 0.035,
+   "t5_cam_xuc": 0.017,
+   "t6_ngat_nhan": 0.0
+  },
+  "wer_adj": 0.019,
+  "peak_footprint_gb": 8.51
+ }
+}

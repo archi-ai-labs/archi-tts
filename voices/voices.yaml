@@ -1,0 +1,109 @@
+# Giọng đọc. engine: vieneu = giọng có sẵn (nhanh); omnivoice = clone từ clip, mỗi cảm xúc một clip.
+# Thêm giọng clone bằng tool add_voice hoặc sửa file này.
+default_voice: ngoc_huyen
+voices:
+  ngoc_huyen:
+    engine: vieneu
+    name: Ngọc Huyền
+    preset: Ngọc Huyền
+    gender: nữ
+    accent: Bắc
+    style: tự nhiên
+  truc_ly:
+    engine: vieneu
+    name: Trúc Ly
+    preset: Trúc Ly
+    gender: nữ
+    accent: Bắc
+    style: tự nhiên
+  doan_trang:
+    engine: vieneu
+    name: Đoan Trang
+    preset: Đoan Trang
+    gender: nữ
+    accent: Bắc
+    style: tự nhiên
+  mai_anh:
+    engine: vieneu
+    name: Mai Anh
+    preset: Mai Anh
+    gender: nữ
+    accent: Bắc
+    style: tin tức
+  ngoc_linh:
+    engine: vieneu
+    name: Ngọc Linh
+    preset: Ngọc Linh
+    gender: nữ
+    accent: Bắc
+    style: kể chuyện
+  quynh_anh:
+    engine: vieneu
+    name: Quỳnh Anh
+    preset: Quỳnh Anh
+    gender: nữ
+    accent: Bắc
+    style: đọc truyện
+  pham_tuyen:
+    engine: vieneu
+    name: Phạm Tuyên
+    preset: Phạm Tuyên
+    gender: nam
+    accent: Bắc
+    style: tự nhiên
+  hai_dang:
+    engine: vieneu
+    name: Hải Đăng
+    preset: Hải Đăng
+    gender: nam
+    accent: Bắc
+    style: tự nhiên
+  xuan_vinh:
+    engine: vieneu
+    name: Xuân Vĩnh
+    preset: Xuân Vĩnh
+    gender: nam
+    accent: Bắc
+    style: tự nhiên
+  quoc_tuan:
+    engine: vieneu
+    name: Quốc Tuấn
+    preset: Quốc Tuấn
+    gender: nam
+    accent: Bắc
+    style: tự nhiên
+  adam_bua:
+    engine: vieneu
+    name: Adam bựa
+    preset: Adam bựa
+    gender: nam
+    accent: Bắc
+    style: tự nhiên, hài hước
+  minh_duc:
+    engine: vieneu
+    name: Minh Đức
+    preset: Minh Đức
+    gender: nam
+    accent: Bắc
+    style: tin tức
+  thien_minh:
+    engine: vieneu
+    name: Thiện Minh
+    preset: Thiện Minh
+    gender: nam
+    accent: Bắc
+    style: kể chuyện
+  thanh_binh:
+    engine: vieneu
+    name: Thanh Bình
+    preset: Thanh Bình
+    gender: nam
+    accent: Bắc
+    style: kể chuyện
+  thien_tam_duc:
+    engine: vieneu
+    name: Thiền Tâm Đức
+    preset: Thiền Tâm Đức
+    gender: nam
+    accent: Bắc
+    style: kể chuyện

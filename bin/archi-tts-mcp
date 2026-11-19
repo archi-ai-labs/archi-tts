@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# MCP launcher used by the Claude Code plugin, Claude Desktop and install.sh.
+# Makes sure the Python environment exists, then runs the server from ~/.archi-tts.
+# Everything except the server's own protocol goes to stderr: stdout is the MCP channel.
+set -euo pipefail
+
+ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
+DATA="${ARCHI_TTS_DATA:-$HOME/.archi-tts}"
+export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
+
+CLAUDE_PLUGIN_ROOT="$ROOT" "$ROOT/bin/archi-tts-bootstrap" --env-only 1>&2
+
+export ARCHI_TTS_HOME="${ARCHI_TTS_HOME:-$DATA/home}"
+exec "$DATA/venv/bin/archi-tts" "$@"

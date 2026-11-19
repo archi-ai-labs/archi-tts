@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+scripts/*.log
+bench/**/.venv/
+bench/engines/src-*/
+bench/engines/logs/
+bench/engines/f5/vocab.txt
+bench/results/*/units/
+.mcp.json
+.claude/settings.local.json
+bench/results/units.json
+bench/results/*/jobs.json
+bench/results/*/run.log
+bench/refs/*.wav

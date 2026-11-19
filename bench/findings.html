@@ -1,0 +1,11 @@
+<h2>Nhận xét từ số đo (chưa thay được tai nghe)</h2>
+<ul class=notes>
+<li><b>Tốc độ:</b> VieNeu nhanh hơn hẳn: giọng có sẵn ~4 phút, clone ~10 phút cho video 15 phút. OmniVoice ~32 phút, F5 ~51 phút.</li>
+<li><b>Lỗi thanh điệu</b> (Whisper nghe ra): VieNeu giọng có sẵn sai nhiều nhất, ví dụ "dã quỳ→giã quỷ", "kè→kẻ", "nàn→nản", "ồn ào→ổn ảo", "phường→phương". VieNeu clone và F5 cũng có "dã quỳ→giã quỷ". OmniVoice không có lỗi thanh điệu nào ở các bài này.</li>
+<li><b>F5</b> bỏ mất chữ "chiếc" trong bài thuyết minh.</li>
+<li><b>Hội thoại</b> câu "Đi Ba Vì đi em" bị Whisper nghe dính chữ ở cả VieNeu clone và OmniVoice. Cần nghe kỹ xem engine đọc quá nhanh hay do Whisper.</li>
+<li><b>"Pro"</b> đọc "pờ rô" bị nghe thành "Peugeot" ở 3/4 engine, nên đổi từ điển thành "prô".</li>
+<li><b>Dung lượng F5</b> 5.45 GB vì file gốc chứa cả trạng thái huấn luyện; trọng số thật khoảng 1.3 GB nếu tách ra.</li>
+<li><b>Cảm xúc:</b> chỉ VieNeu giọng có sẵn không đổi được cảm xúc (luôn đọc theo phong cách của giọng). Mức độ thể hiện cảm xúc của các engine clone cần bạn nghe ở bài "Cảm xúc".</li>
+<li><b>Lưu ý:</b> MCP server dùng bộ chuẩn hóa sea-g2p thay vì soe-vinorm của benchmark này (xung đột thư viện với VieNeu/OmniVoice). Hai bộ cho kết quả tương đương trên các câu thử.</li>
+</ul>

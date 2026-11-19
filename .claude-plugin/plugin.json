@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "archi-tts",
+  "displayName": "Archi TTS",
+  "version": "0.1.0",
+  "description": "Local Vietnamese (Northern accent) text-to-speech for video dubbing, served over MCP. 15 built-in VieNeu voices plus OmniVoice voice cloning with emotion clips; multi-voice scripts with pauses, emphasis, speed, pitch and volume; exports WAV, MP3 and SRT. Runs fully offline on Apple Silicon after a one-time ~4.5 GB model download, which starts automatically on first session.",
+  "author": {
+    "name": "archi-ai-labs",
+    "url": "https://github.com/archi-ai-labs"
+  },
+  "homepage": "https://github.com/archi-ai-labs/archi-tts",
+  "repository": "https://github.com/archi-ai-labs/archi-tts",
+  "license": "MIT",
+  "keywords": [
+    "tts",
+    "text-to-speech",
+    "vietnamese",
+    "dubbing",
+    "voice",
+    "mcp",
+    "audio"
+  ],
+  "mcpServers": {
+    "archi-tts": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/bin/archi-tts-mcp",
+      "args": []
+    }
+  },
+  "defaultEnabled": false
+}

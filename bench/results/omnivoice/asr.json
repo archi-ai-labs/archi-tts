@@ -1,0 +1,164 @@
+{
+ "t1_thuyet_minh__00_00": {
+  "ref": "Chào mừng các bạn quay trở lại với kênh. Trong vi đê ô hôm nay, chúng ta sẽ cùng nhau tìm hiểu vì sao những chiếc máy tính dùng chíp áp pồ lại tiết kiệm điện đến vậy.",
+  "hyp": "Chào mừng các bạn quay trở lại với kênh. Trong video hôm nay, chúng ta sẽ cùng nhau tìm hiểu vì sao những chiếc máy tính dùng chip Apple lại tiết kiệm điện đến vậy.",
+  "errors": 0,
+  "n": 38
+ },
+ "t1_thuyet_minh__00_01": {
+  "ref": "Câu trả lời nằm ở cách thiết kế: bộ xử lý, bộ nhớ và nhân đồ họa được đặt chung trên một con chíp duy nhất.",
+  "hyp": "Câu trả lời nằm ở cách thiết kế, bộ xử lý, bộ nhớ và nhân đồ họa được đặt chung trên một con chip duy nhất.",
+  "errors": 0,
+  "n": 26
+ },
+ "t1_thuyet_minh__00_02": {
+  "ref": "Nhờ đó, dữ liệu không phải đi một quãng đường dài, máy chạy mát hơn và pin dùng được lâu hơn. Tuy nhiên, thiết kế này cũng có điểm trừ, đó là bạn không thể tự nâng cấp bộ nhớ sau khi mua.",
+  "hyp": "Nhờ đó dữ liệu không phải đi một quãng đường dài, máy chạy mát hơn và pin dùng được lâu hơn. Tuy nhiên thiết kế này cũng có điểm trừ, đó là bạn không thể tự nâng cấp bộ nhớ sau khi mua.",
+  "errors": 0,
+  "n": 43
+ },
+ "t1_thuyet_minh__00_03": {
+  "ref": "Vậy có nên mua hay không? Hãy cùng xem tiếp nhé.",
+  "hyp": "Vậy có nên mua hay không? Hãy cùng xem tiếp nhé!",
+  "errors": 0,
+  "n": 11
+ },
+ "t2_hoi_thoai__00_00": {
+  "ref": "Anh ơi, cuối tuần này mình đi đâu chơi không?",
+  "hyp": "Anh ơi cuối tuần này mình đi đâu chơi không?",
+  "errors": 0,
+  "n": 10
+ },
+ "t2_hoi_thoai__01_00": {
+  "ref": "Đi Ba Vì đi em, nghe nói trên đó đang mùa hoa dã quỳ đẹp lắm.",
+  "hyp": "Dibavi DM nghe nói trên đó đang mùa hoa dã quỳ đẹp lắm.",
+  "errors": 5,
+  "n": 16
+ },
+ "t2_hoi_thoai__02_00": {
+  "ref": "Thật á? Nhưng mà dự báo thời tiết bảo có mưa đấy.",
+  "hyp": "Thật á, nhưng mà dự báo thời tiết bảo có mưa đấy.",
+  "errors": 0,
+  "n": 12
+ },
+ "t2_hoi_thoai__03_00": {
+  "ref": "Thế thì mình mang thêm áo mưa, có sao đâu. Đi sớm về sớm là được.",
+  "hyp": "Thế thì mình mang thêm áo mưa, có sao đâu, đi sớm về sớm là được.",
+  "errors": 0,
+  "n": 16
+ },
+ "t3_so_viet_tat__00_00": {
+  "ref": "Ngày mười lăm tháng tám năm hai nghìn không trăm hai mươi lăm, giá vàng tăng mười hai phẩy năm phần trăm so với cùng kỳ.",
+  "hyp": "Ngày 15 tháng 8 năm 2025, giá vàng tăng 12,5% so với cùng kỳ.",
+  "errors": 0,
+  "n": 26
+ },
+ "t3_so_viet_tat__00_01": {
+  "ref": "Tại Thành phố Hồ Chí Minh, hơn một triệu hai trăm năm mươi nghìn người đã tiêm vắc xin cô vít mười chín.",
+  "hyp": "Tại TP.HCM, hơn 1 triệu 250.000 người đã tiêm vaccine COVID-19.",
+  "errors": 2,
+  "n": 23
+ },
+ "t3_so_viet_tat__00_02": {
+  "ref": "Chiếc ai phôn mười sáu pờ rô có giá khoảng hai mươi lăm triệu đồng, dùng chíp mới với gi pi iu mạnh hơn ba mươi phần trăm. Buổi họp bắt đầu lúc mười bốn giờ ba mươi phút, cách trung tâm ba ki lô mét.",
+  "hyp": "Chiếc iPhone 16S Pro có giá khoảng 25 triệu đồng, dùng chip mới với GPU mạnh hơn 30%, buổi họp bắt đầu lúc 14h30, cách trung tâm 3km.",
+  "errors": 1,
+  "n": 46
+ },
+ "t3_so_viet_tat__00_03": {
+  "ref": "Các ứng dụng ây ai ngày càng phổ biến.",
+  "hyp": "Các ứng dụng AAI ngày càng phổ biến.",
+  "errors": 2,
+  "n": 9
+ },
+ "t4_doan_dai__00_00": {
+  "ref": "Hà Nội vào thu là lúc thành phố đẹp nhất trong năm. Buổi sáng, sương mỏng phủ trên mặt hồ Gươm, những hàng cây bên đường bắt đầu chuyển sang màu vàng nhạt.",
+  "hyp": "Hà Nội vào thu là lúc thành phố đẹp nhất trong năm. Buổi sáng sương mỏng phủ trên mặt hồ gươm, những hàng cây bên đường bắt đầu chuyển sang màu vàng nhạt.",
+  "errors": 0,
+  "n": 33
+ },
+ "t4_doan_dai__00_01": {
+  "ref": "Người ta thấy những gánh hàng rong chở đầy hoa cúc họa mi đi qua các con phố cổ, để lại một mùi hương rất nhẹ.",
+  "hyp": "Người ta thấy những gánh hàng rong trở đầy hoa cúc họa mi đi qua các con phố cổ, để lại một mùi hương rất nhẹ.",
+  "errors": 1,
+  "n": 26
+ },
+ "t4_doan_dai__00_02": {
+  "ref": "Ở góc phố Hàng Bông, ông cụ bán cốm vẫn ngồi đó như mấy chục năm nay, gói từng nắm cốm xanh trong lá sen. Khách quen đi qua, dừng lại hỏi han vài câu, rồi lại vội vã hòa vào dòng người.",
+  "hyp": "Ở góc phố Hàng Bông, ông cụ bán cốm vẫn ngồi đó như mấy chục năm nay gói từng nắm cốm xanh trong lá sen. Khách quen đi qua dừng lại hỏi han vài câu rồi lại vội vã hòa vào dòng người.",
+  "errors": 0,
+  "n": 43
+ },
+ "t4_doan_dai__00_03": {
+  "ref": "Buổi trưa, nắng trở nên vàng hơn, trong hơn, không còn gay gắt như những ngày hè. Học sinh tan trường ríu rít trên vỉa hè, tiếng còi xe xen lẫn tiếng rao quen thuộc.",
+  "hyp": "Buổi trưa, nắng trở nên vàng hơn, trong hơn, không còn gây gắt như những ngày hè, học sinh tan trường díu dít trên vỉa hè, tiếng còi xe, sen lẫn tiếng giao quen thuộc.",
+  "errors": 5,
+  "n": 35
+ },
+ "t4_doan_dai__00_04": {
+  "ref": "Chiều xuống, gió hồ Tây thổi lồng lộng, những đôi bạn trẻ ngồi bên bờ kè ngắm hoàng hôn đỏ rực cuối trời. Khi đèn đường bật sáng, phố phường lại mang một vẻ khác, vừa náo nhiệt vừa trầm mặc.",
+  "hyp": "Chiều xuống, gió hồ Tây thổi lồng lộng, những đôi bạn trẻ ngồi bên bờ kè ngắm hoàng hôn đỏ rực cuối trời. Khi đèn đường bật sáng, phố phường lại mang một vẻ khác, vừa náo nhiệt vừa trầm mặc.",
+  "errors": 0,
+  "n": 41
+ },
+ "t4_doan_dai__00_05": {
+  "ref": "Những quán cà phê nhỏ chật kín người, câu chuyện kéo dài đến tận khuya.",
+  "hyp": "Những quán cà phê nhỏ chật kín người, câu chuyện kéo dài đến tận khuya.",
+  "errors": 0,
+  "n": 15
+ },
+ "t4_doan_dai__00_06": {
+  "ref": "Có lẽ vì thế mà dù đi đâu, người Hà Nội vẫn luôn nhớ về mùa thu của mình, nhớ cái se lạnh đầu mùa, nhớ mùi hoa sữa nồng nàn, và nhớ cả những buổi chiều lang thang không có mục đích.",
+  "hyp": "Có lẽ vì thế mà dù đi đâu, người Hà Nội vẫn luôn nhớ về mùa thu của mình, nhớ cái xe lạnh đầu mùa, nhớ mùi hoa sữa nồng nàn và nhớ cả những buổi chiều lang thang không có mục đích.",
+  "errors": 1,
+  "n": 43
+ },
+ "t4_doan_dai__00_07": {
+  "ref": "Mùa thu Hà Nội không ồn ào, không rực rỡ, nhưng đủ để khiến người ta thương nhớ mãi.",
+  "hyp": "Mùa thu Hà Nội không ồn ào, không rực rỡ, nhưng đủ để khiến người ta thương nhớ mãi.",
+  "errors": 0,
+  "n": 19
+ },
+ "t5_cam_xuc__00_00": {
+  "ref": "Trời ơi, cuối cùng thì mình cũng làm được rồi! Vui quá đi mất!",
+  "hyp": "Trời ơi, cuối cùng thì mình cũng làm được rồi Vui quá đi mất",
+  "errors": 0,
+  "n": 14
+ },
+ "t5_cam_xuc__01_00": {
+  "ref": "Từ ngày anh đi, căn nhà này bỗng trở nên trống trải lạ thường.",
+  "hyp": "Từ ngày anh đi, căn nhà này bỗng trở nên trống trải lạ thường",
+  "errors": 0,
+  "n": 14
+ },
+ "t5_cam_xuc__02_00": {
+  "ref": "Tôi đã nói bao nhiêu lần rồi, sao anh vẫn không chịu nghe?",
+  "hyp": "Tôi đã nói bao nhiêu lần rồi sao anh vẫn không chịu nghe?",
+  "errors": 0,
+  "n": 13
+ },
+ "t5_cam_xuc__03_00": {
+  "ref": "Theo thông tin từ trung tâm khí tượng, ngày mai Hà Nội có mưa rào và dông.",
+  "hyp": "Theo thông tin từ Trung tâm Khí tượng, ngày mai Hà Nội có mưa rào và rông.",
+  "errors": 1,
+  "n": 17
+ },
+ "t6_ngat_nhan__00_00": {
+  "ref": "Đây là điều quan trọng nhất.",
+  "hyp": "Đây là điều quan trọng nhất.",
+  "errors": 0,
+  "n": 6
+ },
+ "t6_ngat_nhan__00_02": {
+  "ref": "Bạn, phải sao lưu dữ liệu trước khi cập nhật.",
+  "hyp": "Bạn phải sao lưu dữ liệu trước khi cập nhật.",
+  "errors": 0,
+  "n": 10
+ },
+ "t6_ngat_nhan__00_04": {
+  "ref": "Nếu không, toàn bộ ảnh và tài liệu có thể bị mất.",
+  "hyp": "Nếu không, toàn bộ ảnh và tài liệu có thể bị mất.",
+  "errors": 0,
+  "n": 12
+ }
+}

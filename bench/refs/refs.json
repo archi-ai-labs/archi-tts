@@ -1,0 +1,62 @@
+{
+ "nu": {
+  "trung_tinh": {
+   "wav": "nu_trung_tinh_kore.wav",
+   "text": "Để sử dụng lò vi sóng an toàn, bạn không nên dùng các vật dụng bằng kim loại và cần đặt thức ăn vào hộp chuyên dụng chịu nhiệt.",
+   "speaker": "kore",
+   "dur": 7.1,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  },
+  "vui": {
+   "wav": "nu_vui_kore.wav",
+   "text": "Trời ơi chị hai sinh em bé rồi, thằng cu trộm vía kháu khỉnh đáng yêu quá chừng, cả nhà mình vỡ òa trong hạnh phúc, tôi chính thức được lên chức dì rồi mọi người ơi!",
+   "speaker": "kore",
+   "dur": 10.0,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  },
+  "buon": {
+   "wav": "nu_buon_kore.wav",
+   "text": "Tôi thấy mình già đi nhanh vì lo lắng, vì thất bại, vì gồng gánh, nhưng điều đau nhất là chẳng ai nhận ra tôi đang kiệt quệ.",
+   "speaker": "kore",
+   "dur": 8.7,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  },
+  "tuc_gian": {
+   "wav": "nu_tuc_gian_kore.wav",
+   "text": "Bà cứ để nước chảy tràn sang nhà tôi, tôi đã nhắc bao nhiêu lần rồi, bà có tai để nghe không vậy?",
+   "speaker": "kore",
+   "dur": 5.6,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  }
+ },
+ "nam": {
+  "trung_tinh": {
+   "wav": "nam_trung_tinh_charon.wav",
+   "text": "Sản phẩm được đóng gói trong hộp giấy các tông tái chế, bên trong có lớp xốp chống sốc để bảo vệ khi vận chuyển.",
+   "speaker": "charon",
+   "dur": 7.1,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  },
+  "vui": {
+   "wav": "nam_vui_charon.wav",
+   "text": "Nhìn con chập chững bước đi những bước đầu tiên mà lòng mẹ trào dâng niềm hạnh phúc khó tả, cảm ơn con đã đến bên mẹ thật khỏe mạnh!",
+   "speaker": "charon",
+   "dur": 9.4,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  },
+  "buon": {
+   "wav": "nam_buon_charon.wav",
+   "text": "Tôi mất động lực vì làm gì cũng bị chê, bị phủ nhận, và cuối cùng tôi không còn tin vào lựa chọn của chính mình nữa.",
+   "speaker": "charon",
+   "dur": 7.6,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  },
+  "tuc_gian": {
+   "wav": "nam_tuc_gian_charon.wav",
+   "text": "Tại sao đến giờ này mà hồ sơ vẫn chưa được duyệt, các anh có biết sự chậm trễ này gây thiệt hại bao nhiêu tiền của cho doanh nghiệp chúng tôi không hả?",
+   "speaker": "charon",
+   "dur": 7.0,
+   "source": "slexisvn/emotion-tts-vietnamese-sample (Gemini TTS voices)"
+  }
+ }
+}

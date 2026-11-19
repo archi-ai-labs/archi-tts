@@ -1,0 +1,55 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # On a version tag (v1.2.3), fail unless it matches plugin.json's version
+      # (the only place the version lives; pyproject reads it from there).
+      - name: Check tag matches plugin version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")"
+          echo "tag: $tag   plugin.json: $pkg"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::Tag v$tag must match plugin.json ($pkg)."
+            exit 1
+          fi
+
+      - name: Lint JSON and shell
+        run: |
+          for f in .claude-plugin/plugin.json hooks/hooks.json; do
+            python3 -c "import json, sys; json.load(open(sys.argv[1]))" "$f" && echo "ok $f"
+          done
+          for f in bin/archi-tts-bootstrap bin/archi-tts-mcp install.sh; do bash -n "$f" && echo "ok $f"; done
+
+      # Text, script and SRT logic. The TTS engines (torch, ONNX models) are not
+      # installed here: they need ~5 GB and Apple Silicon to be meaningful.
+      - name: Unit tests (text pipeline)
+        run: |
+          pip install -q pytest pyyaml numpy soundfile soxr sea-g2p
+          PYTHONPATH=src python -m pytest -q tests/test_text_script.py
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate plugin (also checks skill frontmatter)
+        run: claude plugin validate . --strict
