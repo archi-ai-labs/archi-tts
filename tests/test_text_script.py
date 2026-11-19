@@ -149,3 +149,11 @@ def test_per_engine_lexicon(tmp_path):
     # VieNeu: its own reading wins, and hyphens become spaces.
     assert load_lexicon(p, "vieneu") == {"AI": "ây ai", "GPU": "GPU"}
     assert normalize("AI và GPU, 2 con.", load_lexicon(p, "vieneu")) == "ây ai và GPU, hai con."
+
+
+def test_lite_edition_rejects_cloned_voice(registry, monkeypatch):
+    monkeypatch.setattr(config, "has_omnivoice", lambda: False)
+    segs = parse_script("[ngoc_huyen] Một.\n[lan] Hai.", registry.resolve, registry.default)
+    with pytest.raises(ScriptError, match="bản full"):
+        build_plan(segs, registry)
+    build_plan(segs[:1], registry)  # built-in voices still work

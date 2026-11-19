@@ -6,7 +6,20 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Two editions. **lite** (new default): the 15 built-in VieNeu voices only, ~1.3 GB on disk and
+  ~1.4 GB of RAM, no torch. **full**: adds OmniVoice voice cloning, emotion clips and `add_voice`
+  (~5.3 GB). Switch with `archi-tts-bootstrap --full` / `--lite` or `install.sh --full` / `--lite`.
+- `list_voices` reports the `edition`; in lite, cloned voices and `add_voice` return an error that
+  says how to install full.
+
 ### Changed
+
+- OmniVoice moved to the optional `full` extra (`uv sync --extra full`).
+- Installs made before editions existed keep OmniVoice (detected as full).
+- Scripts are validated before a job is queued, so errors return at once.
+- `install.sh --uninstall` removes the plugin by its marketplace id `archi-tts@archi-ai-labs`.
 
 - CI runs only on pull requests into `main` and on version tags, and skips docs- and
   benchmark-only changes; day-to-day work happens on `develop`.

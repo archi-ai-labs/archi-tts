@@ -24,3 +24,14 @@ for vid, name, gender in (("lan", "Lan", "nữ"), ("tung", "Tùng", "nam")):
 
 os.environ["ARCHI_TTS_HOME"] = str(_home)
 os.environ.setdefault("ARCHI_TTS_OUTPUT", str(_home / "output"))
+
+
+import pytest  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def _full_edition(monkeypatch):
+    """Tests run as the full edition even where OmniVoice isn't installed (CI); a test can override."""
+    from archi_tts import config
+
+    monkeypatch.setattr(config, "has_omnivoice", lambda: True)

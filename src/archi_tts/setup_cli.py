@@ -29,8 +29,9 @@ from . import config  # noqa: E402
 MODELS = {
     "VieNeu-TTS v3 Turbo": "pnnbao-ump/VieNeu-TTS-v3-Turbo",
     "MOSS audio codec (VieNeu)": "OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano-ONNX",
-    "OmniVoice VN": config.OMNIVOICE_MODEL,
 }
+if config.has_omnivoice():  # full install
+    MODELS["OmniVoice VN"] = config.OMNIVOICE_MODEL
 WHISPER = "openai/whisper-large-v3-turbo"
 DESKTOP_CONFIG = Path.home() / "Library/Application Support/Claude/claude_desktop_config.json"
 
@@ -62,7 +63,9 @@ def cmd_doctor(_: argparse.Namespace) -> int:
         except RuntimeError as e:
             print(f"{tool:11s} THIẾU — {e}")
             ok = False
-    for name, repo in {**MODELS, "Whisper (tùy chọn)": WHISPER}.items():
+    print(f"Bản cài      {config.edition()}" + ("" if config.has_omnivoice() else " (chỉ giọng VieNeu; giọng clone cần bản full)"))
+    extra = {"Whisper (tùy chọn)": WHISPER} if config.has_omnivoice() else {}
+    for name, repo in {**MODELS, **extra}.items():
         mark = "có" if cached(repo) else ("chưa tải" if "Whisper" not in name else "chưa tải (chỉ cần khi add_voice không có transcript)")
         print(f"{name:27s} {mark}")
         ok &= cached(repo) or "Whisper" in name
@@ -83,8 +86,8 @@ def cmd_download(args: argparse.Namespace) -> int:
 
     Vieneu()
     print(f"  xong ({time.time() - t:.0f}s)", flush=True)
-    repos = {"OmniVoice VN": config.OMNIVOICE_MODEL}
-    if args.whisper:
+    repos = {"OmniVoice VN": config.OMNIVOICE_MODEL} if config.has_omnivoice() else {}
+    if args.whisper and config.has_omnivoice():
         repos["Whisper large-v3-turbo"] = WHISPER
     for name, repo in repos.items():
         t = time.time()
@@ -121,6 +124,10 @@ def cmd_selftest(_: argparse.Namespace) -> int:
     try:
         reg = VoiceRegistry()
         ref = render(reg, f"[ngoc_huyen] {ref_text}", "selftest_ref")
+        if not config.has_omnivoice():  # lite install: VieNeu only
+            res = render(reg, "[ngoc_huyen] Ngày 15/8/2025, giá tăng 12,5%.", "selftest")
+            print(f"OK (lite): {res.duration_s}s audio trong {time.time() - t:.0f}s → {res.mp3}")
+            return 0
         data = yaml.safe_load(reg.path.read_text(encoding="utf-8")) or {}
         data.setdefault("voices", {})["selftest_clone"] = {
             "engine": "omnivoice", "name": "selftest clone",

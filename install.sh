@@ -5,7 +5,9 @@
 #   ./install.sh                 set up, then ask where to register (Claude Code / Claude Desktop / HTTP)
 #   ./install.sh --yes           register Claude Code + Claude Desktop without asking
 #   ./install.sh --no-register   set up and self-test only
-#   ./install.sh --whisper       also download Whisper (add_voice without a transcript)
+#   ./install.sh --full          full edition: adds OmniVoice voice cloning (~1 GB libraries + 3.3 GB model)
+#   ./install.sh --lite          back to the lite edition (built-in VieNeu voices only; the default)
+#   ./install.sh --whisper       also download Whisper (add_voice without a transcript; full only)
 #   ./install.sh --http          run one shared HTTP server in the background (LaunchAgent)
 #   ./install.sh --uninstall     remove registrations and the background server (keeps ~/.archi-tts and models)
 set -euo pipefail
@@ -19,15 +21,17 @@ AGENT_ID="com.archi-ai-labs.archi-tts"
 AGENT_PLIST="$HOME/Library/LaunchAgents/$AGENT_ID.plist"
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
-YES=0; REGISTER=1; WHISPER=0; HTTP=0; UNINSTALL=0
+YES=0; REGISTER=1; WHISPER=0; HTTP=0; UNINSTALL=0; EDITION=""
 for arg in "$@"; do
   case "$arg" in
     --yes|-y) YES=1 ;;
     --no-register) REGISTER=0 ;;
     --whisper) WHISPER=1 ;;
+    --full) EDITION=full ;;
+    --lite) EDITION=lite ;;
     --http) HTTP=1 ;;
     --uninstall) UNINSTALL=1 ;;
-    -h|--help) sed -n '2,11p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,13p' "$0"; exit 0 ;;
     *) echo "Tham số không hợp lệ: $arg"; exit 2 ;;
   esac
 done
@@ -46,7 +50,7 @@ if [[ $UNINSTALL -eq 1 ]]; then
   say "Gỡ đăng ký archi-tts"
   if have_claude; then
     claude mcp remove -s user archi-tts >/dev/null 2>&1 && echo "Đã gỡ khỏi Claude Code (mcp)." || true
-    claude plugin uninstall archi-tts@archi-tts >/dev/null 2>&1 && echo "Đã gỡ plugin Claude Code." || true
+    claude plugin uninstall archi-tts@archi-ai-labs >/dev/null 2>&1 && echo "Đã gỡ plugin Claude Code." || true
   fi
   [[ -x "$DATA/venv/bin/archi-tts-setup" ]] && setup_cli register-desktop --remove || true
   if [[ -f "$AGENT_PLIST" ]]; then
@@ -61,11 +65,17 @@ if [[ "$(uname -s)" != "Darwin" || "$(uname -m)" != "arm64" ]]; then
   echo "Cảnh báo: archi-tts được thử trên Mac Apple Silicon; máy này là $(uname -s) $(uname -m)."
 fi
 
+if [[ -z "$EDITION" && ! -f "$DATA/edition" ]] &&
+   ask "Cài bản full (thêm giọng clone OmniVoice, ~4.3 GB)? Không thì cài bản lite (15 giọng VieNeu, ~2 GB)." n; then
+  EDITION=full
+fi
 say "Cài đặt (thư viện, môi trường Python, model, chạy thử)"
-"$ROOT/bin/archi-tts-bootstrap"
+"$ROOT/bin/archi-tts-bootstrap" ${EDITION:+--$EDITION}
 
-if [[ $WHISPER -eq 0 ]] && ask "Tải thêm Whisper (~1.6 GB) để add_voice tự nhận dạng lời trong clip?" n; then WHISPER=1; fi
-[[ $WHISPER -eq 1 ]] && HF_HUB_OFFLINE=0 setup_cli download --whisper
+if [[ "$(cat "$DATA/edition" 2>/dev/null)" == full ]]; then
+  if [[ $WHISPER -eq 0 ]] && ask "Tải thêm Whisper (~1.6 GB) để add_voice tự nhận dạng lời trong clip?" n; then WHISPER=1; fi
+  [[ $WHISPER -eq 1 ]] && HF_HUB_OFFLINE=0 setup_cli download --whisper
+fi
 
 if [[ $REGISTER -eq 1 ]]; then
   if [[ $HTTP -eq 0 && $YES -eq 0 ]] && ask "Chạy MỘT server HTTP chung ở nền (tiết kiệm RAM khi dùng nhiều client)?" n; then HTTP=1; fi

@@ -62,11 +62,15 @@ source = { editable = "." }
 dependencies = [
     { name = "mcp" },
     { name = "numpy" },
-    { name = "omnivoice" },
     { name = "pyyaml" },
     { name = "sea-g2p" },
     { name = "soundfile" },
     { name = "vieneu" },
+]
+
+[package.optional-dependencies]
+full = [
+    { name = "omnivoice" },
 ]
 
 [package.dev-dependencies]
@@ -78,12 +82,13 @@ dev = [
 requires-dist = [
     { name = "mcp", specifier = ">=1.20" },
     { name = "numpy" },
-    { name = "omnivoice", specifier = ">=0.2" },
+    { name = "omnivoice", marker = "extra == 'full'", specifier = ">=0.2" },
     { name = "pyyaml" },
     { name = "sea-g2p", specifier = ">=0.10" },
     { name = "soundfile" },
     { name = "vieneu", specifier = ">=3.8" },
 ]
+provides-extras = ["full"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest" }]
