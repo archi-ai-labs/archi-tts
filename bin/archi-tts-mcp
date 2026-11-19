@@ -11,4 +11,5 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 CLAUDE_PLUGIN_ROOT="$ROOT" "$ROOT/bin/archi-tts-bootstrap" --env-only 1>&2
 
 export ARCHI_TTS_HOME="${ARCHI_TTS_HOME:-$DATA/home}"
+export ARCHI_TTS_BOOTSTRAP="$ROOT/bin/archi-tts-bootstrap"   # quoted in "install full" hints
 exec "$DATA/venv/bin/archi-tts" "$@"

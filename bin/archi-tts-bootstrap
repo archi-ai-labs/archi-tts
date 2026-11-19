@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # Prepare everything archi-tts needs, idempotently.
 #
-#   archi-tts-bootstrap                 full setup in the foreground (deps, venv, models, self-test)
+#   archi-tts-bootstrap                 setup in the foreground (deps, venv, models, self-test)
+#   archi-tts-bootstrap --full          same, switching to the "full" edition (adds OmniVoice voice cloning)
+#   archi-tts-bootstrap --lite          same, switching back to "lite" (built-in VieNeu voices only)
 #   archi-tts-bootstrap --env-only      just the Python environment (used by the MCP launcher)
 #   archi-tts-bootstrap --session-start Claude Code hook: no-op when ready, else start setup in the background
 #   archi-tts-bootstrap --status        print ready / installing / not installed
 #
 # State lives in $ARCHI_TTS_DATA (default ~/.archi-tts) so it survives plugin updates:
 #   venv/  Python environment      home/  voices + lexicon (yours to edit)
-#   setup.log   .ready   .env-stamp
+#   setup.log   .ready   .env-stamp   edition (lite | full; new installs are lite)
 set -euo pipefail
 
 ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
@@ -20,17 +22,29 @@ export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
 mkdir -p "$DATA"
 
 MODE="full"
+WANT=""
 case "${1:-}" in
   --env-only) MODE="env" ;;
   --session-start) MODE="hook" ;;
   --status) MODE="status" ;;
+  --full) WANT="full" ;;
+  --lite) WANT="lite" ;;
   "") ;;
-  *) echo "usage: $0 [--env-only|--session-start|--status]" >&2; exit 2 ;;
+  *) echo "usage: $0 [--full|--lite|--env-only|--session-start|--status]" >&2; exit 2 ;;
 esac
+
+# Edition: "lite" (VieNeu, ~0.6 GB of models) unless the user asked for "full"
+# (adds OmniVoice cloning: torch + a 3.3 GB model). Installs made before editions
+# existed already have OmniVoice, so they stay full.
+edition() {
+  if [[ -f "$DATA/edition" ]]; then cat "$DATA/edition"
+  elif compgen -G "$VENV/lib/python3.*/site-packages/omnivoice" >/dev/null; then echo full
+  else echo lite; fi
+}
 
 # Fingerprint of what the venv was built from; a plugin update changes it.
 env_stamp() {
-  (cd "$ROOT" && cat uv.lock pyproject.toml && find src -type f -name '*.py' | LC_ALL=C sort | xargs cat) | shasum | cut -c1-16
+  (edition; cd "$ROOT" && cat uv.lock pyproject.toml && find src -type f -name '*.py' | LC_ALL=C sort | xargs cat) | shasum | cut -c1-16
 }
 env_ready()  { [[ -x "$VENV/bin/archi-tts" && -f "$DATA/.env-stamp" && "$(cat "$DATA/.env-stamp")" == "$(env_stamp)" ]]; }
 all_ready()  { env_ready && [[ -f "$DATA/.ready" ]]; }
@@ -65,26 +79,39 @@ seed_home() {
 
 sync_env() {
   env_ready && return 0
-  log "Cài môi trường Python vào $VENV ..."
-  UV_PROJECT_ENVIRONMENT="$VENV" uv sync --project "$ROOT" --frozen --no-dev --no-editable --reinstall-package archi-tts --python 3.11 >&2
+  local extra=()
+  [[ "$(edition)" == full ]] && extra=(--extra full)
+  log "Cài môi trường Python (bản $(edition)) vào $VENV ..."
+  UV_PROJECT_ENVIRONMENT="$VENV" uv sync --project "$ROOT" --frozen --no-dev --no-editable --reinstall-package archi-tts \
+    --python 3.11 ${extra[@]+"${extra[@]}"} >&2
   env_stamp > "$DATA/.env-stamp"
 }
 
 full_setup() {
+  if [[ -n "$WANT" && "$WANT" != "$(edition)" ]]; then
+    echo "$WANT" > "$DATA/edition"
+    rm -f "$DATA/.ready"
+  fi
+  local ed
+  ed="$(edition)"
+  echo "$ed" > "$DATA/edition"   # pin it (also pins installs that predate editions)
   ensure_tools
   seed_home
   sync_env
-  log "Tải model (lần đầu ~4.5 GB)..."
+  if [[ "$(edition)" == full ]]; then log "Tải model (bản full, lần đầu ~3.9 GB)..."; else log "Tải model (bản lite, lần đầu ~0.6 GB)..."; fi
   ARCHI_TTS_HOME="$DATA/home" "$VENV/bin/archi-tts-setup" download >&2
   log "Chạy thử..."
   ARCHI_TTS_HOME="$DATA/home" "$VENV/bin/archi-tts-setup" selftest >&2
   date > "$DATA/.ready"
-  log "archi-tts sẵn sàng."
+  log "archi-tts sẵn sàng (bản $(edition))."
+  if [[ "$(edition)" == lite && -d "${HF_HOME:-$HOME/.cache/huggingface}/hub/models--danhcao--v-omnivoice" ]]; then
+    log "Model OmniVoice cũ vẫn nằm trong cache (3.3 GB). Không cần nữa thì xoá: rm -rf ${HF_HOME:-$HOME/.cache/huggingface}/hub/models--danhcao--v-omnivoice"
+  fi
 }
 
 case "$MODE" in
   status)
-    if all_ready; then echo ready; elif installing; then echo installing; else echo "not installed"; fi ;;
+    if all_ready; then echo "ready ($(edition))"; elif installing; then echo installing; else echo "not installed"; fi ;;
   env)
     ensure_tools && seed_home && sync_env ;;
   hook)
@@ -93,13 +120,13 @@ case "$MODE" in
       nohup "$0" >/dev/null 2>&1 </dev/null &   # full mode writes $LOG itself
       echo $! > "$LOCK"                            # so --status says "installing" right away
     fi
-    echo "archi-tts (TTS tiếng Việt) đang được cài lần đầu ở nền: thư viện, môi trường Python và ~4.5 GB model, mất khoảng 5–15 phút. Tiến độ: $LOG. Khi xong, các tool archi-tts sẽ dùng được (có thể cần /mcp để kết nối lại)."
+    echo "archi-tts (TTS tiếng Việt, bản $(edition)) đang được cài ở nền: thư viện, môi trường Python và model (lite ~0.6 GB, full ~3.9 GB), mất khoảng 3–15 phút. Tiến độ: $LOG. Khi xong, các tool archi-tts sẽ dùng được (có thể cần /mcp để kết nối lại)."
     ;;
   full)
     if installing; then
       log "Đang có một lượt cài khác chạy (pid $(cat "$LOCK")); chờ xong..."
       while installing; do sleep 3; done
-      all_ready && { log "archi-tts sẵn sàng."; exit 0; }
+      [[ -z "$WANT" || "$WANT" == "$(edition)" ]] && all_ready && { log "archi-tts sẵn sàng (bản $(edition))."; exit 0; }
     fi
     echo $$ > "$LOCK"              # the main script's pid stays alive for the whole run
     trap 'rm -f "$LOCK"' EXIT

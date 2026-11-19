@@ -3,7 +3,7 @@
 TTS tiếng Việt (giọng Bắc) chạy hoàn toàn trên máy, dùng để lồng tiếng video, gọi qua MCP.
 
 - **Giọng có sẵn**: VieNeu-TTS v3 Turbo, 15 giọng Bắc. Nhanh (~4 phút cho 15 phút audio trên M1 Pro), nhưng không đổi được cảm xúc và đôi khi sai thanh điệu.
-- **Giọng clone**: OmniVoice (bản fine-tune tiếng Việt `danhcao/v-omnivoice`). Mỗi cảm xúc một clip tham chiếu 3–10s. Chậm hơn (~40 phút cho 15 phút audio) nhưng ít lỗi thanh điệu nhất trong benchmark.
+- **Giọng clone** (chỉ bản full): OmniVoice (bản fine-tune tiếng Việt `danhcao/v-omnivoice`). Mỗi cảm xúc một clip tham chiếu 3–10s. Chậm hơn (~40 phút cho 15 phút audio) nhưng ít lỗi thanh điệu nhất trong benchmark.
 - Xuất WAV 48 kHz (−16 LUFS), MP3 và SRT vào `~/archi-tts-output/<tên>/`.
 
 Kết quả so sánh 4 engine nằm trong `bench/` (mở `bench/results/index.html` qua `python3 -m http.server --directory bench`).
@@ -28,7 +28,7 @@ Hoặc dùng installer của marketplace (đăng ký catalog và bật plugin �
 curl -fsSL https://archi-ai-labs.github.io/agent-marketplace/install.sh | bash -s -- --plugins archi-tts
 ```
 
-Rồi mở phiên mới. Phiên đầu tiên tự cài ở nền (thư viện Homebrew, môi trường Python, ~4.5 GB model; khoảng 5–15 phút, xem `~/.archi-tts/setup.log`). Xong thì các tool `archi-tts` dùng được; nếu chưa thấy, gõ `/mcp` và kết nối lại `archi-tts`. Skill `/archi-tts:setup` để kiểm tra, sửa lỗi, đăng ký Claude Desktop hoặc gỡ cài đặt.
+Rồi mở phiên mới. Phiên đầu tiên tự cài **bản lite** ở nền (thư viện Homebrew, môi trường Python, model VieNeu; vài phút, xem `~/.archi-tts/setup.log`). Xong thì các tool `archi-tts` dùng được; nếu chưa thấy, gõ `/mcp` và kết nối lại `archi-tts`. Skill `/archi-tts:setup` để kiểm tra, sửa lỗi, đăng ký Claude Desktop hoặc gỡ cài đặt.
 
 **Plugin cài ở trạng thái tắt** (`defaultEnabled: false`), vì nó có hook `SessionStart` (cài đặt nền) và một MCP server. Bật bằng `/plugin enable archi-tts@archi-ai-labs` (hoặc `claude plugin enable archi-tts@archi-ai-labs`). Máy đã cài và bật từ trước không bị ảnh hưởng: giá trị đã ghi trong `enabledPlugins` luôn được ưu tiên hơn mặc định. Cần Claude Code ≥ v2.1.154; bản cũ hơn bỏ qua trường này và bật plugin ngay khi cài.
 
@@ -41,13 +41,38 @@ Rồi mở phiên mới. Phiên đầu tiên tự cài ở nền (thư viện Ho
 > ở nền để cài ngay mà không phải chờ phiên mới, báo người dùng mở phiên mới hoặc `/mcp` khi log báo "sẵn sàng".
 > Cần Homebrew; nếu máy chưa có, đưa lệnh cài từ https://brew.sh cho người dùng tự chạy.
 
-Yêu cầu: Mac Apple Silicon, ≥16 GB RAM, Homebrew, ~6 GB ổ trống.
+### Bản lite và bản full
+
+Mặc định cài **lite**: 15 giọng VieNeu có sẵn, không có giọng clone. Cần giọng clone (cảm xúc theo clip, `add_voice`) thì nâng lên **full**. Số đo trên M1 Pro:
+
+| | Lite (mặc định) | Full |
+|---|---|---|
+| Giọng | 15 giọng VieNeu | + giọng clone OmniVoice, cảm xúc theo clip |
+| Model | 0.6 GB | 3.9 GB |
+| Môi trường Python | 0.64 GB (không có torch) | 1.3 GB |
+| Tổng ổ đĩa | ~1.3 GB | ~5.3 GB |
+| RAM | ~1.4 GB | ~5 GB lúc nghỉ, ~7.6 GB đỉnh |
+
+Lúc cài, cache tải của `uv` chiếm thêm (2.2 GB với bản full); xoá bằng `uv cache clean` nếu cần chỗ.
+
+Nâng lên full (hoặc nói với Claude "cài bản full của archi-tts"; skill `/archi-tts:setup` có lệnh này):
+
+```bash
+bash "$(ls -d ~/.claude/plugins/cache/archi-ai-labs/archi-tts/*/ | tail -1)bin/archi-tts-bootstrap" --full
+```
+
+Hạ về lite thì dùng `--lite`: thư viện OmniVoice bị gỡ khỏi môi trường Python, còn model 3.3 GB vẫn nằm trong `~/.cache/huggingface` (lệnh xoá được in ra cuối log). Đổi bản xong, kết nối lại server bằng `/mcp`. Máy đã cài trước khi có hai bản (có sẵn OmniVoice) được giữ là full.
+
+Ở bản lite, `list_voices` trả `"edition": "lite"`; gọi giọng clone hay `add_voice` sẽ báo lỗi kèm lệnh nâng cấp.
+
+Yêu cầu: Mac Apple Silicon, Homebrew; RAM và ổ trống theo bảng trên (full nên có ≥16 GB RAM).
 
 ### Dữ liệu nằm ở đâu
 
 | Thư mục | Nội dung |
 |---|---|
 | `~/.archi-tts/venv/` | Môi trường Python (tự dựng lại khi plugin cập nhật) |
+| `~/.archi-tts/edition` | `lite` hoặc `full` |
 | `~/.archi-tts/home/` | `voices/` + `lexicon.yaml` của bạn: copy từ bản mặc định ở lần đầu, sau đó plugin không ghi đè |
 | `~/.archi-tts/setup.log` | Log cài đặt |
 | `~/.cache/huggingface/` | Model |
@@ -57,7 +82,8 @@ Yêu cầu: Mac Apple Silicon, ≥16 GB RAM, Homebrew, ~6 GB ổ trống.
 
 ```bash
 git clone https://github.com/archi-ai-labs/archi-tts && cd archi-tts
-./install.sh            # cài, chạy thử, rồi hỏi đăng ký Claude Code / Claude Desktop / server HTTP chung
+./install.sh            # hỏi lite/full, cài, chạy thử, rồi hỏi đăng ký Claude Code / Claude Desktop / server HTTP chung
+./install.sh --full     # cài (hoặc nâng lên) bản full; --lite để hạ về lite
 ./install.sh --uninstall
 ```
 
@@ -106,7 +132,7 @@ Một trang, đi từ trên xuống:
 
 ### Thêm giọng clone
 
-Repo chỉ kèm 15 giọng VieNeu, không kèm giọng clone nào. Thêm giọng của bạn bằng tool `add_voice` (hoặc nói với Claude "thêm giọng lan từ file ~/clip.wav"): mỗi cảm xúc một clip 3–10 s, giọng sạch, một người nói, kèm lời thoại đúng từng chữ (thiếu lời thoại thì Whisper tự nghe, tải thêm ~1.6 GB). Giọng được ghi vào `~/.archi-tts/home/voices/`. Chỉ clone giọng bạn có quyền sử dụng.
+Cần bản full. Repo chỉ kèm 15 giọng VieNeu, không kèm giọng clone nào. Thêm giọng của bạn bằng tool `add_voice` (hoặc nói với Claude "thêm giọng lan từ file ~/clip.wav"): mỗi cảm xúc một clip 3–10 s, giọng sạch, một người nói, kèm lời thoại đúng từng chữ (thiếu lời thoại thì Whisper tự nghe, tải thêm ~1.6 GB). Giọng được ghi vào `~/.archi-tts/home/voices/`. Chỉ clone giọng bạn có quyền sử dụng.
 
 Mỗi câu được cache, nên sửa một dòng rồi xuất lại thì chỉ sinh lại dòng đó. Đổi `speed`/`pitch`/`volume` không cần sinh lại (xử lý hậu kỳ).
 
@@ -141,8 +167,8 @@ Với từ điển hiện tại, cả 4 giọng thử (`ngoc_huyen`, `pham_tuyen
 
 ## Tài nguyên (M1 Pro 16 GB)
 
-- Model: VieNeu ~1.2 GB, OmniVoice ~3.3 GB; Whisper ~1.6 GB tải thêm khi `add_voice` không kèm transcript.
-- RAM đỉnh của server khi dùng cả hai engine: ~7.6 GB (OmniVoice chạy trên GPU qua MPS); ~5 GB lúc nghỉ sau khi đã nạp model.
+- Model: VieNeu + MOSS codec 0.6 GB, OmniVoice 3.3 GB (chỉ bản full); Whisper 1.6 GB tải thêm khi `add_voice` không kèm transcript.
+- RAM: bản lite ~1.4 GB. Bản full khi dùng cả hai engine: đỉnh ~7.6 GB (OmniVoice chạy trên GPU qua MPS), ~5 GB lúc nghỉ sau khi đã nạp model.
 - Job 6 phút audio, 5 giọng: sinh trong 7 phút, tốc độ không chậm dần (RTF đầu/cuối: VieNeu 0.28/0.28, OmniVoice 2.68/2.69).
 - Chạy được hoàn toàn offline sau lần tải model đầu tiên (`HF_HUB_OFFLINE=1`).
 
@@ -155,9 +181,15 @@ Với từ điển hiện tại, cả 4 giọng thử (`ngoc_huyen`, `pham_tuyen
 ## Phát triển
 
 ```bash
-uv sync                               # .venv cho repo, dùng voices/ và lexicon.yaml trong repo
+uv sync --extra full                  # .venv cho repo (có OmniVoice), dùng voices/ và lexicon.yaml trong repo
 uv run --group dev pytest             # unit test
 uv run python scripts/mcp_smoke.py    # end-to-end qua MCP stdio (cần model)
 ARCHI_TTS_HOME=~/.archi-tts/home uv run python scripts/control_check.py   # các script đo cần giọng clone
 ARCHI_TTS_SMOKE_CMD=bin/archi-tts-mcp uv run python scripts/mcp_smoke.py   # qua launcher của plugin
 ```
+
+### Nhánh và phát hành
+
+- `main`: chỉ chứa bản đã phát hành, là thứ người cài plugin nhận được. Không commit thẳng.
+- `develop`: làm việc hằng ngày ở đây. Push lên `develop` không chạy CI.
+- Phát hành: tăng `version` trong `.claude-plugin/plugin.json` (chỗ duy nhất chứa version) và cập nhật `CHANGELOG.md` trên `develop`, mở PR `develop → main` (CI chạy một lần), merge khi xanh, rồi gắn tag `vX.Y.Z` trên `main` (CI kiểm tra tag khớp version).

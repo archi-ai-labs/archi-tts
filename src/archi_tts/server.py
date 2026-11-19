@@ -9,6 +9,7 @@ Both modes also serve the voice-testing web UI at http://127.0.0.1:8770 from thi
 
 from __future__ import annotations
 
+import importlib.util
 import os
 from pathlib import Path as _Path
 
@@ -17,8 +18,9 @@ def _offline_if_cached() -> None:
     """Stay off the network once the models are on disk (must run before
     huggingface_hub is imported). Set HF_HUB_OFFLINE=0 to allow downloads."""
     hub = _Path(os.environ.get("HF_HUB_CACHE") or _Path(os.environ.get("HF_HOME", _Path.home() / ".cache/huggingface")) / "hub")
-    needed = ["pnnbao-ump--VieNeu-TTS-v3-Turbo", "OpenMOSS-Team--MOSS-Audio-Tokenizer-Nano-ONNX",
-              "models--" + os.environ.get("ARCHI_TTS_OMNIVOICE_MODEL", "danhcao/v-omnivoice").replace("/", "--")]
+    needed = ["pnnbao-ump--VieNeu-TTS-v3-Turbo", "OpenMOSS-Team--MOSS-Audio-Tokenizer-Nano-ONNX"]
+    if importlib.util.find_spec("omnivoice"):  # full install only
+        needed.append("models--" + os.environ.get("ARCHI_TTS_OMNIVOICE_MODEL", "danhcao/v-omnivoice").replace("/", "--"))
     if all((hub / (n if n.startswith("models--") else f"models--{n}")).is_dir() for n in needed):
         os.environ.setdefault("HF_HUB_OFFLINE", "1")
 
@@ -34,6 +36,7 @@ from pathlib import Path
 from mcp.server.mcpserver import MCPServer
 
 from . import config
+from .pipeline import build_plan
 from .script import Segment, ScriptError, normalize_emotion, parse_script, split_pauses
 from .runtime import engines, jobs, registry, renderer
 from .text import load_lexicon, normalize, save_lexicon_entry
@@ -85,11 +88,22 @@ async def list_voices() -> dict:
     switching). engine=omnivoice: cloned voices (slower, better tone accuracy, one reference clip per
     emotion: trung_tinh, vui, buon, tuc_gian)."""
     registry.reload()
-    return {
+    full = config.has_omnivoice()
+    voices = []
+    for v in registry.voices.values():
+        d = v.describe()
+        if v.engine == "omnivoice" and not full:
+            d["available"] = False
+        voices.append(d)
+    out = {
+        "edition": config.edition(),
         "default_voice": registry.default,
-        "voices": [v.describe() for v in registry.voices.values()],
+        "voices": voices,
         "speed_hint": "Trên M1 Pro, 15 phút audio: vieneu ~4–5 phút, omnivoice ~40 phút.",
     }
+    if not full:
+        out["note"] = config.full_hint()
+    return out
 
 
 @mcp.tool()
@@ -113,6 +127,7 @@ async def speak(text: str, voice: str | None = None, emotion: str | None = None,
         v = registry.get(voice)
         seg = Segment(voice=v.id, text_parts=split_pauses(text), emotion=normalize_emotion(emotion),
                       speed=_clamp(speed, 0.5, 2.0), pitch=_clamp(pitch, -6, 6), volume=_clamp(volume, -12, 12), line=1)
+        build_plan([seg], registry)  # fail fast (e.g. a cloned voice in the lite install)
     except ScriptError as e:
         return {"error": str(e)}
     job = jobs.submit(output_name or "speak", lambda p: renderer.render([seg], output_name, p))
@@ -130,6 +145,7 @@ async def synthesize_script(script: str, output_name: str | None = None, wait_se
     try:
         registry.reload()
         segments = parse_script(script, _resolve, registry.default)
+        build_plan(segments, registry)  # fail fast (e.g. a cloned voice in the lite install)
     except ScriptError as e:
         return {"error": str(e)}
     job = jobs.submit(output_name or "script", lambda p: renderer.render(segments, output_name, p))
@@ -194,6 +210,8 @@ async def add_voice(voice_id: str, audio_path: str, transcript: str | None = Non
     Call again with the same voice_id and another emotion (vui, buon, tuc_gian) to add emotion clips.
     transcript: exact words spoken in the clip (strongly recommended; otherwise Whisper transcribes it).
     Only clone voices you have the right to use."""
+    if not config.has_omnivoice():
+        return {"error": config.full_hint()}
     transcribed = False
     try:
         registry.validate_clip(audio_path)

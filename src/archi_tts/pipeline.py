@@ -21,7 +21,7 @@ import soundfile as sf
 
 from . import config, dsp
 from .engines.base import Engine
-from .script import Pause, Segment, slug
+from .script import Pause, ScriptError, Segment, slug
 from .text import Chunk, chunk_text, load_lexicon, subtitle_lines
 from .voices import Voice, VoiceRegistry
 
@@ -80,6 +80,8 @@ def build_plan(segments: list[Segment], registry: VoiceRegistry) -> tuple[list[I
     warnings: list[str] = []
     for seg in segments:
         voice = registry.get(seg.voice)
+        if voice.engine == "omnivoice" and not config.has_omnivoice():
+            raise ScriptError(f"Dòng {seg.line}: giọng '{voice.id}' là giọng clone. {config.full_hint()}")
         if seg.emotion and seg.emotion != "trung_tinh":
             if voice.engine == "vieneu":
                 warnings.append(f"Dòng {seg.line}: giọng có sẵn '{voice.id}' không đổi cảm xúc "
